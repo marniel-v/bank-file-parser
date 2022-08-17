@@ -1,10 +1,40 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Parser";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@if (!String.IsNullOrEmpty(Model.Error))
+{
+    <div class="alert alert-danger" role="alert">
+        @Model.Error
+    </div>
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col align-self-center">
+            <div class="text-center pt-5">
+                <h2 class="display-4">Bank Debit Order Parser</h2>
+                <p class="fw-bold">
+                    Upload your XML file below
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="row pt-3">
+        <div class="col d-flex justify-content-center">
+            <form enctype="multipart/form-data" method="post">
+                <div class="pb-3" style="min-width:500px !important;">
+                    <input asp-for="BankFile.FormFile" type="file" accept="application/xml" />
+                    <span asp-validation-for="BankFile.FormFile" class="text-danger"></span>
+                </div>
+                <button asp-page-handler="Upload" type="submit" class="btn btn-sm btn-secondary">Upload</button>
+            </form>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
