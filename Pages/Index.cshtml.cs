@@ -44,7 +44,7 @@ namespace BankFileParser.Pages
             {
                 Error = "Failed to parse: bank file should be in XML format";
             }
-            catch (SystemException)
+            catch (System.Exception)
             {
                 return RedirectToPage("./Error");
             }
