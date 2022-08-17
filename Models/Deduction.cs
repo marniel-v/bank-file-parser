@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Xml;
 
 namespace BankFileParser.Models
@@ -26,27 +27,29 @@ namespace BankFileParser.Models
 
             foreach (XmlNode childNode in node.ChildNodes)
             {
+                var innerText = String.IsNullOrWhiteSpace(childNode.InnerText) ? null : childNode.InnerText;
+ 
                 switch (childNode.Name)
                 {
                     case FIELD_ACCOUNT_HOLDER:
-                        debitOrder.AccountHolder = childNode.InnerText;
+                        debitOrder.AccountHolder = innerText;
                         break;
                     case FIELD_ACCOUNT_NUMBER:
-                        debitOrder.AccountNumber = childNode.InnerText;
+                        debitOrder.AccountNumber = innerText;
                         break;
                     case FIELD_ACCOUNT_TYPE:
-                        debitOrder.AccountType = childNode.InnerText;
+                        debitOrder.AccountType = innerText;
                         break;
                     case FIELD_BANK_NAME:
-                        debitOrder.BankName = childNode.InnerText;
+                        debitOrder.BankName = innerText;
                         break;
                     case FIELD_BRANCH:
-                        debitOrder.Branch = childNode.InnerText;
+                        debitOrder.Branch = innerText;
                         break;
                     case FIELD_AMOUNT:
                         try
                         {
-                            debitOrder.Amount = Convert.ToDouble(childNode.InnerText);
+                            debitOrder.Amount = innerText == null ? null : Convert.ToDouble(innerText);
                         }
                         catch (System.Exception)
                         {
@@ -54,7 +57,12 @@ namespace BankFileParser.Models
                         }
                         break;
                     case FIELD_DATE:
-                        debitOrder.Date = childNode.InnerText;
+                        var result = DateTime.Now;
+
+                        if (DateTime.TryParse(innerText, null, DateTimeStyles.None, out result))
+                        {
+                            debitOrder.Date = innerText;
+                        }
                         break;
                     default:
                         break;
@@ -62,6 +70,17 @@ namespace BankFileParser.Models
             }
 
             return debitOrder;
+        }
+
+        public bool IsValid()
+        {
+            return this.AccountHolder != null &&
+                this.AccountNumber != null &&
+                this.AccountType != null &&
+                this.BankName != null &&
+                this.Branch != null &&
+                this.Amount != null &&
+                this.Date != null;
         }
     }
 }

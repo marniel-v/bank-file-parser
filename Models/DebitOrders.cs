@@ -1,4 +1,5 @@
 using System.Xml;
+using System.Collections.Generic;
 
 namespace BankFileParser.Models
 {
@@ -27,6 +28,18 @@ namespace BankFileParser.Models
             }
 
             return debitOrders;
+        }
+
+        public bool IsValid()
+        {
+            foreach (Deduction deduction in this.Deductions)
+            {
+                if (!deduction.IsValid()) {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }
