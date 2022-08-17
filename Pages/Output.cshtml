@@ -1,0 +1,94 @@
+﻿@page
+@using BankFileParser.Models
+@model OutputModel
+@{
+    ViewData["Title"] = "Output";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col align-self-center">
+            <div class="text-center pt-5">
+                <h2 class="display-4">Parser Results</h2>
+            </div>
+        </div>
+    </div>
+
+    @if (!String.IsNullOrEmpty(Model.Error))
+    {
+        <div class="alert alert-danger" role="alert">
+            @Model.Error
+        </div>
+    }
+
+    <div class="row pt-3">
+        <div class="col align-self-center">
+            <div class="accordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="debit-order-file">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#debit-order-accord" aria-expanded="true" aria-controls="debit-order-accord">
+                        Parsed Debit Order File
+                    </button>
+                    </h2>
+                    <div id="debit-order-accord" class="accordion-collapse collapse show" aria-labelledby="debit-order-file" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <table class="table">
+                                <tr>
+                                    <th scope="col">Account Holder</th>
+                                    <th scope="col">Account Number</th>
+                                    <th scope="col">Account Type</th>
+                                    <th scope="col">Bank Name</th>
+                                    <th scope="col">Branch</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Date</th>
+                                </tr>
+                                @foreach (var deduction in Model.Orders.Deductions)
+                                {
+                                    <tr>
+                                        <th scope="row" class="@(deduction.AccountHolder == null ? "text-danger" : "")">@(deduction.AccountHolder ?? "Invalid")</th>
+                                        <td class="@(deduction.AccountNumber == null ? "text-danger" : "")">@(deduction.AccountNumber ?? "Invalid")</td>
+                                        <td class="@(deduction.AccountType == null ? "text-danger" : "")">@(deduction.AccountType ?? "Invalid")</td>
+                                        <td class="@(deduction.BankName == null ? "text-danger" : "")">@(deduction.BankName ?? "Invalid")</td>
+                                        <td class="@(deduction.Branch == null ? "text-danger" : "")">@(deduction.Branch ?? "Invalid")</td>
+                                        <td class="@(deduction.Amount == null ? "text-danger" : "")">@(deduction.Amount == null ? "Invalid" : string.Format("{0:C}", deduction.Amount))</td>
+                                        <td class="@(deduction.Date == null ? "text-danger" : "")">@(deduction.Date ?? "Invalid")</td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                @{
+                    var count = 0;
+                }
+                @foreach (KeyValuePair<string, FlatFile> entry in Model.FlatFiles)
+                {
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="flat-file-@count">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flat-file-accord-@count" aria-expanded="false" aria-controls="flat-file-accord-@count">
+                            @entry.Value.Header.BankName Flat File 
+                        </button>
+                        </h2>
+                        <div id="flat-file-accord-@count" class="accordion-collapse collapse" aria-labelledby="flat-file-@count" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <table class="table">
+                                    <tr>
+                                        <th scope="row">@entry.Value.Header.ToString()</th>
+                                    </tr>
+                                    @foreach (var deduction in entry.Value.Deductions)
+                                    {
+                                        <tr>
+                                            <td>@deduction.ToString().Replace(" ", "\xA0")</td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    count++;
+                }
+            </div>
+        </div>
+    </div>
+</div>
