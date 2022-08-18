@@ -21,7 +21,7 @@ namespace BankFileParser.Models
             this.TotalValue += value == null ? 0 : (double) value;
         }
 
-        public string ToString()
+        public override string ToString()
         {
             return FormatBankName() + FormatRecordCount() + FormatTotalValue();
         }
@@ -30,7 +30,10 @@ namespace BankFileParser.Models
         {
             var upper = this.BankName.ToUpper();
 
-            return upper.PadRight(16, ' ');
+            var length = upper.Length < 16 ? upper.Length : 16;
+            var shorten = upper.Substring(0, length);
+
+            return shorten.PadRight(16, ' ');
         }
 
         private string FormatRecordCount()

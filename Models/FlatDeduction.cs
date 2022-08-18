@@ -36,7 +36,7 @@ namespace BankFileParser.Models
             this.Date = deduction.Date;
         }
 
-        public string ToString()
+        public override string ToString()
         {
             return this.Initials + 
                 FormatSurname() +
@@ -49,7 +49,11 @@ namespace BankFileParser.Models
 
         private string FormatSurname()
         {
-            return this.Surname.Replace(" ", "").PadRight(15, ' ');
+            var noSpace = this.Surname.Replace(" ", "");
+            var length = noSpace.Length < 15 ? noSpace.Length : 15;
+            var shorten = noSpace.Substring(0, length);
+
+            return shorten.PadRight(15, ' ');
         }
 
         private string FormatAccountNumber()
@@ -82,7 +86,10 @@ namespace BankFileParser.Models
 
         private string FormatBranch()
         {
-            return this.Branch.PadRight(10, ' ');
+            var length = this.Branch.Length < 15 ? this.Branch.Length : 15;
+            var shorten = this.Branch.Substring(0, length);
+
+            return shorten.PadRight(10, ' ');
         }
 
         private string FormatAmount()
@@ -96,7 +103,7 @@ namespace BankFileParser.Models
         {
             var dateTime = DateTime.Now;
 
-            if (!DateTime.TryParseExact(this.Date, "dd/MM/yyyy", null, DateTimeStyles.None, out dateTime))
+            if (!DateTime.TryParseExact(this.Date, "MM/dd/yyyy", null, DateTimeStyles.None, out dateTime))
             {
                 dateTime = DateTime.Parse(this.Date);
             }
