@@ -1,0 +1,8 @@
+﻿@model double?
+
+@if (Model == null) {
+   <span class="text-danger fw-bold">Invalid</span>
+}
+else {
+   string.Format("{0:C}", @Model);
+}

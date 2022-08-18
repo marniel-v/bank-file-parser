@@ -45,13 +45,17 @@
                                 @foreach (var deduction in Model.Orders.Deductions)
                                 {
                                     <tr>
-                                        <th scope="row" class="@(deduction.AccountHolder == null ? "text-danger" : "")">@(deduction.AccountHolder ?? "Invalid")</th>
-                                        <td class="@(deduction.AccountNumber == null ? "text-danger" : "")">@(deduction.AccountNumber ?? "Invalid")</td>
-                                        <td class="@(deduction.AccountType == null ? "text-danger" : "")">@(deduction.AccountType ?? "Invalid")</td>
-                                        <td class="@(deduction.BankName == null ? "text-danger" : "")">@(deduction.BankName ?? "Invalid")</td>
-                                        <td class="@(deduction.Branch == null ? "text-danger" : "")">@(deduction.Branch ?? "Invalid")</td>
-                                        <td class="@(deduction.Amount == null ? "text-danger" : "")">@(deduction.Amount == null ? "Invalid" : string.Format("{0:C}", deduction.Amount))</td>
-                                        <td class="@(deduction.Date == null ? "text-danger" : "")">@(deduction.Date ?? "Invalid")</td>
+                                        <th scope="row">
+                                            <span class="text-muted">
+                                                @Html.DisplayFor(model => deduction.AccountHolder)
+                                            </span>
+                                        </th>
+                                        <td>@Html.DisplayFor(model => deduction.AccountNumber)</td>
+                                        <td>@Html.DisplayFor(model => deduction.AccountType)</td>
+                                        <td>@Html.DisplayFor(model => deduction.BankName)</td>
+                                        <td>@Html.DisplayFor(model => deduction.Branch)</td>
+                                        <td>@Html.DisplayFor(model => deduction.Amount)</td>
+                                        <td>@Html.DisplayFor(model => deduction.Date)</td>
                                     </tr>
                                 }
                             </table>
@@ -64,30 +68,43 @@
                 @foreach (KeyValuePair<string, FlatFile> entry in Model.FlatFiles)
                 {
                     <div class="accordion-item">
-                        <h2 class="accordion-header" id="flat-file-@count">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flat-file-accord-@count" aria-expanded="false" aria-controls="flat-file-accord-@count">
-                            @entry.Value.Header.BankName Flat File 
-                        </button>
+                        <h2 class="accordion-header d-flex" id="flat-file-@count">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flat-file-accord-@count" aria-expanded="false" aria-controls="flat-file-accord-@count">
+                                @Html.DisplayFor(model => entry.Value.Header.BankName) Flat File 
+                            </button>
                         </h2>
                         <div id="flat-file-accord-@count" class="accordion-collapse collapse" aria-labelledby="flat-file-@count" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <table class="table">
                                     <tr>
-                                        <th scope="row">@entry.Value.Header.ToString()</th>
+                                        <th scope="row" class="font-monospace">@Html.DisplayFor(model => entry.Value.Header)</th>
                                     </tr>
                                     @foreach (var deduction in entry.Value.Deductions)
                                     {
                                         <tr>
-                                            <td>@deduction.ToString().Replace(" ", "\xA0")</td>
+                                            <td class="font-monospace">@Html.DisplayFor(model => deduction)</td>
                                         </tr>
                                     }
                                 </table>
+                                <div class="d-flex justify-content-end">
+                                    <a download href="@Url.Page("Output", "Download", new { fileName = Model.OrdersFileName, flatName = entry.Value.Header.BankName})" class="btn btn-sm btn-outline-success mx-3">
+                                        @Html.Raw("\u21E9") Download
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     count++;
                 }
+            </div>
+            <div class="d-flex justify-content-end mt-5">
+                <a download href="@Url.Page("Output", "Download", new { fileName = Model.OrdersFileName, flatName = "all"})" class="btn btn-sm btn-outline-success mx-3">
+                    @Html.Raw("\u21E9") Download All
+                </a>
+                <a asp-page="Index" class="btn btn-sm btn-outline-primary">
+                    Back
+                </a>
             </div>
         </div>
     </div>
