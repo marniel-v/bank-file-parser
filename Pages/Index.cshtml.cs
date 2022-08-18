@@ -30,7 +30,7 @@ namespace BankFileParser.Pages
 
                 System.IO.File.WriteAllText(filePath, json);
                 
-                return RedirectToPage("./Output", new {name = Path.GetFileName(filePath)});
+                return RedirectToPage("./Output", new {fileName = Path.GetFileName(filePath)});
             }
             catch (FormFileEmptyException)
             {
@@ -46,7 +46,7 @@ namespace BankFileParser.Pages
             }
             catch (System.Exception)
             {
-                return RedirectToPage("./Error");
+                return RedirectToPage("./Error", new { error = "An error occurred while processing your request"});
             }
 
             return Page();
@@ -56,7 +56,7 @@ namespace BankFileParser.Pages
     public class FileUpload
     {
         [Required]
-        [Display(Name="XML Bank File")]
+        [Display(Name="XML File")]
         public IFormFile FormFile { get; set; }
     }
 }
