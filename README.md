@@ -15,3 +15,26 @@ Parses a debit order xml file into bank specific flat files.
   &lt<span class=""fw-bold"">/deduction</span>&gt
 &lt<span class=""fw-bold"">/debitorders</span>&gt
 </pre>
+
+# Getting Started
+Use these instructions to get the project up and running.
+
+### Prerequisites
+1. [Install DotNet Core 3.1](https://dotnet.microsoft.com/en-us/download/dotnet/3.1)
+
+### Installation
+1. Clone the repository
+2. At the root directory, restore required packages by running:
+<pre>
+dotnet restore
+</pre>
+3. Then build the solution:
+<pre>
+dotnet build
+</pre>
+4. After that, launch the backend by:
+<pre>
+dotnet run
+</pre>
+
+Follow the url to view the web app!
