@@ -2,6 +2,22 @@
 @model IndexModel
 @{
     ViewData["Title"] = "Parser";
+
+    var xmlFormat = @"
+<div class=""text-info h5"">
+<pre>
+&lt<span class=""fw-bold"">debitorders</span>&gt
+  &lt<span class=""fw-bold"">deduction</span>&gt
+    &lt<span class=""fw-bold"">accountholder</span>&gtAccount Holder Name&lt<span class=""fw-bold"">/accountholder</span>&gt
+	&lt<span class=""fw-bold"">accountnumber</span>&gtAccount Number&lt<span class=""fw-bold"">/accountnumber</span>&gt
+	&lt<span class=""fw-bold"">accounttype</span>&gtAccount Type (cheque, savings, other)&lt<span class=""fw-bold"">/accounttype</span>&gt
+	&lt<span class=""fw-bold"">bankname</span>&gtBank Name&lt<span class=""fw-bold"">/bankname</span>&gt
+	&lt<span class=""fw-bold"">branch</span>&gtBank Branch&lt<span class=""fw-bold"">/branch</span>&gt
+	&lt<span class=""fw-bold"">amount</span>&gtAmount Deducted&lt<span class=""fw-bold"">/amount</span>&gt
+	&lt<span class=""fw-bold"">date</span>&gtDate Deducted (MM/dd/yyyy)&lt<span class=""fw-bold"">/date</span>&gt
+  &lt<span class=""fw-bold"">/deduction</span>&gt
+&lt<span class=""fw-bold"">/debitorders</span>&gt
+</pre></div>";
 }
 
 <div class="container">
@@ -11,6 +27,16 @@
                 <h2 class="display-4">Bank Debit Order Parser</h2>
                 <p class="fw-bold">
                     Upload your XML file below
+                    <span class="btn btn-sm btn-outline-info mx-3" 
+                        data-bs-html="true" 
+                        data-bs-container="body" 
+                        data-bs-toggle="popover" 
+                        data-bs-placement="bottom" 
+                        data-bs-trigger="hover" 
+                        data-bs-content="@xmlFormat"
+                    >
+                    Format ?
+                    </span>
                 </p>
             </div>
         </div>
@@ -38,4 +64,11 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script type="text/javascript">
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl)
+        })
+    </script>
 }
