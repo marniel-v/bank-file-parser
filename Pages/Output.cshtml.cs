@@ -16,11 +16,9 @@ public class OutputModel : PageModel
 
     public IActionResult OnGet(string fileName)
     {
-        OrdersFileName = fileName;
-        
         try
         {
-            InitOrders();
+            InitDebitOrders(fileName);
             InitFlatFiles("all");
         }
         catch (System.Exception)
@@ -35,11 +33,9 @@ public class OutputModel : PageModel
 
     public IActionResult OnGetDownload(string fileName, string flatName)
     {
-        OrdersFileName = fileName;
-
         try
         {
-            InitOrders();
+            InitDebitOrders(fileName);
             InitFlatFiles(flatName);
         }
         catch (System.Exception)
@@ -74,9 +70,9 @@ public class OutputModel : PageModel
         return File(bytes, "application/octet-stream", flatName + ".txt");
     }
 
-    private void InitOrders()
+    private void InitDebitOrders(string fileName)
     {
-        Orders = new DebitOrders();
+        OrdersFileName = fileName;
 
         var ordersPath = Path.GetTempPath() + $"{OrdersFileName}";
         var json = System.IO.File.ReadAllText(ordersPath);
