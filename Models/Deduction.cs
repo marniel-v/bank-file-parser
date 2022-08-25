@@ -49,7 +49,7 @@ namespace BankFileParser.Models
                     case FIELD_AMOUNT:
                         try
                         {
-                            debitOrder.Amount = innerText == null ? null : Convert.ToDouble(innerText);
+                            debitOrder.Amount = innerText == null ? null : Convert.ToDouble(innerText, CultureInfo.InvariantCulture);
                         }
                         catch (System.Exception)
                         {
