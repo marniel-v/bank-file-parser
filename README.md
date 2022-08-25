@@ -20,7 +20,7 @@ Parses a debit order xml file into bank specific flat files.
 Use these instructions to get the project up and running.
 
 ### Prerequisites
-1. [Install DotNet Core 3.1](https://dotnet.microsoft.com/en-us/download/dotnet/3.1)
+1. [Install DotNet 6.0](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
 
 ### Installation
 1. Clone the repository
